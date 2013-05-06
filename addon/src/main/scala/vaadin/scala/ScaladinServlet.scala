@@ -18,8 +18,9 @@ class ScaladinServlet extends VaadinServlet {
     }
   }
 
-  override def createServletService(c: com.vaadin.server.DeploymentConfiguration) =
-    new ScaladinServletService(new com.vaadin.server.VaadinServletService(this, c) with ScaladinServletServiceMixin).p
+  override def createServletService(c: com.vaadin.server.DeploymentConfiguration) = {
+    new ScaladinServletService(new com.vaadin.server.VaadinServletService(this, c) with ScaladinServletServiceMixin).init().p
+  }
 
   def service: ScaladinServletService = WrapperUtil.wrapperFor(getService).get
 }
