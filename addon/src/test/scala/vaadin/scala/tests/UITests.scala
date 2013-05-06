@@ -148,9 +148,9 @@ class UITests extends ScaladinTestSuite {
     //needs some special setup because of the session requirement
     val mockSession = mock[com.vaadin.server.VaadinSession]
     val mockWrapped = mock[WrappedVaadinUI]
-    
+
     when(mockWrapped.getSession()).thenReturn(mockSession)
-    
+
     val testui = new MockUI(mockWrapped)
 
     val layout = new VerticalLayout
@@ -159,10 +159,10 @@ class UITests extends ScaladinTestSuite {
     testui.access(() => {
       layout.data = "foobar"
     })
-    
+
     verify(mockWrapped, times(3)).access(any(classOf[java.lang.Runnable]))
   }
-  
+
 }
 
-class MockUI(val mock: WrappedVaadinUI) extends UI(mock)  
+class MockUI(val mock: WrappedVaadinUI) extends UI(mock)
