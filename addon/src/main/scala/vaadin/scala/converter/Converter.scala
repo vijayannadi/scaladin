@@ -12,10 +12,11 @@ package mixins {
 
     override def wrapper = super.wrapper.asInstanceOf[Converter[Presentation, Model]]
 
-    override def convertToModel(value: Presentation, locale: Locale): Model =
+    //    type extendsModel = 
+    override def convertToModel(value: Presentation, targetType: Class[_ <: Model], locale: Locale): Model =
       wrapper.convertToModel(Option(value), locale).getOrElse(null).asInstanceOf[Model]
 
-    override def convertToPresentation(value: Model, locale: Locale): Presentation =
+    override def convertToPresentation(value: Model, targetType: Class[_ <: Presentation], locale: Locale): Presentation =
       wrapper.convertToPresentation(Option(value), locale).getOrElse(null).asInstanceOf[Presentation]
 
     override def getPresentationType: Class[Presentation] = wrapper.presentationType
@@ -53,9 +54,9 @@ abstract class Converter[Presentation: Manifest, Model: Manifest](val p: com.vaa
 abstract class DeletagePeerConverter[Presentation: Manifest, Model: Manifest](override val p: com.vaadin.data.util.converter.Converter[Presentation, Model] with ConverterMixin[Presentation, Model]) extends Converter[Presentation, Model](p) {
 
   def convertToPresentation(value: Option[Model], locale: Locale): Option[Presentation] =
-    Option(p.convertToPresentation(value.getOrElse(null).asInstanceOf[Model], locale))
+    Option(p.convertToPresentation(value.getOrElse(null).asInstanceOf[Model], presentationType, locale))
 
   def convertToModel(value: Option[Presentation], locale: Locale): Option[Model] =
-    Option(p.convertToModel(value.getOrElse(null).asInstanceOf[Presentation], locale))
+    Option(p.convertToModel(value.getOrElse(null).asInstanceOf[Presentation], modelType, locale))
 
 }
