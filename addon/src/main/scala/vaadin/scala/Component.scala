@@ -32,7 +32,7 @@ package mixins {
     override def wrapper: C = super.wrapper.asInstanceOf[C]
   }
 
-  trait ComponentMixin extends ScaladinMixin { self: com.vaadin.ui.Component =>
+  trait ComponentMixin extends ClientConnectorMixin { self: com.vaadin.ui.Component =>
     def wrapperComponent: Component = wrapper.asInstanceOf[Component]
   }
 }
@@ -49,7 +49,7 @@ object Component {
   }
 }
 
-trait Component extends Wrapper {
+trait Component extends ClientConnector {
   def p: com.vaadin.ui.Component with ComponentMixin
 
   // TODO: add methods styleName, addStyleName, removeStyleName?
@@ -73,7 +73,7 @@ trait Component extends Wrapper {
   def visible_=(visible: Boolean) { p.setVisible(visible) }
 
   // TODO parent setter?
-  def parent: Option[Component] = wrapperFor(p.getParent())
+  override def parent: Option[HasComponents] = wrapperFor(p.getParent())
 
   def readOnly: Boolean = p.isReadOnly
   def readOnly_=(readOnly: Boolean) { p.setReadOnly(readOnly) }
