@@ -6,6 +6,7 @@ import event.BlurEvent
 import event.ClickEvent
 import event.FocusEvent
 import event.LayoutClickEvent
+import vaadin.scala.ClientConnector
 
 class LayoutClickListener(val action: LayoutClickEvent => Unit) extends com.vaadin.event.LayoutEvents.LayoutClickListener with Listener {
   def layoutClick(e: com.vaadin.event.LayoutEvents.LayoutClickEvent) = action(LayoutClickEvent(wrapperFor[Component](e.getComponent).get, wrapperFor[Component](e.getClickedComponent).get, wrapperFor[Component](e.getChildComponent).get, MouseButton(e.getButton.ordinal), e.getClientX, e.getClientY, e.getRelativeX, e.getRelativeY, e.isDoubleClick, e.isAltKey, e.isCtrlKey, e.isMetaKey, e.isShiftKey))
@@ -124,4 +125,8 @@ class AfterViewChangeListener(val action: Navigator.ViewChangeEvent => Unit) ext
   override def afterViewChange(e: com.vaadin.navigator.ViewChangeListener.ViewChangeEvent) {
     action(Navigator.ViewChangeEvent(wrapperFor[Navigator](e.getNavigator).get, wrapperFor[Navigator.View](e.getOldView), wrapperFor[Navigator.View](e.getNewView).get, Option(e.getViewName), e.getParameters))
   }
+}
+
+class DetachListener(val action: DetachEvent => Unit) extends com.vaadin.server.ClientConnector.DetachListener with Listener {
+  def detach(e: com.vaadin.server.ClientConnector.DetachEvent) = action(DetachEvent(wrapperFor[ClientConnector](e.getConnector()).get))
 }
